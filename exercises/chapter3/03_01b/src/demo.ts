@@ -1,17 +1,16 @@
 type ContactName = string;
 
-enum ContactStatus {
-    Active = "active",
-    Inactive = "inactive",
-    New = "new"
-}
+type ContactStatus = "active" | "inactive" | "new" // a way to use enums with only type declaration
+
+type ContactBirthDate = Date | number | string; // pipe sintax to accept more than 1 type
 
 interface Contact {
     id: number;
     name: ContactName;
-    birthDate?: Date;
+    birthDate?: ContactBirthDate
     status?: ContactStatus;
 }
+type AddressableContact = Contact & Address // combining 2 interfaces into one type
 
 interface Address {
     line1: string;
@@ -20,7 +19,7 @@ interface Address {
     region: string;
     postalCode: string;
 }
-
+// here we make 3 types of function to handle every type of data
 function getBirthDate(contact: Contact) {
     if (typeof contact.birthDate === "number") {
         return new Date(contact.birthDate);
@@ -35,5 +34,6 @@ function getBirthDate(contact: Contact) {
 
 let primaryContact: Contact = {
     id: 12345,
-    name: "Jamie Johnson"
+    name: "Jamie Johnson",
+    status: "active"
 }
