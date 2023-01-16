@@ -1,6 +1,7 @@
-let x = { name: "Wruce Bayne" };
-x.id = 1234;
-
+let x: Record <string, string |number| boolean | Function> = {name: "Wruce Bayne"}
+x.number = 1234 
+x.active =true
+x.log = () => console.log("awesome!");
 
 
 ////////////////////
@@ -18,18 +19,25 @@ interface Contact {
     name: string;
     status: ContactStatus;
     address: Address;
+    email: string
 }
 
-interface Query {
+
+interface Query <TProp>{
     sort?: 'asc' | 'desc';
-    matches(val): boolean;
+    matches(val: TProp): boolean;
+}
+// type ContactQuery= Omit<Partial<Record<keyof Contact, Query>>, "address" | "status">// with partial you make optional every option of an object and with omit you delete options of that type list
+// type ContactQuery= Partial<Pick<Record<keyof Contact, Query>>, "id" | "name"> //if you only want to add query to some values you can use pick instead of query
+type ContactQuery ={
+    [TProp in keyof Contact]?: Query<Contact[TProp]>
 }
 
-function searchContacts(contacts: Contact[], query) {
+function searchContacts(contacts: Contact[], query: ContactQuery) {
     return contacts.filter(contact => {
-        for (const property of Object.keys(contact)) {
+        for (const property of Object.keys(contact) as (keyof Contact)[]) {
             // get the query object for this property
-            const propertyQuery = query[property];
+            const propertyQuery = query[property] as Query<Contact[keyof Contact]>;
             // check to see if it matches
             if (propertyQuery && propertyQuery.matches(contact[property])) {
                 return true;
@@ -45,6 +53,5 @@ const filteredContacts = searchContacts(
     {
         id: { matches: (id) => id === 123 },
         name: { matches: (name) => name === "Carol Weaver" },
-        phoneNumber: { matches: (name) => name === "Carol Weaver" },
     }
 );

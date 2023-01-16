@@ -35,7 +35,7 @@ interface ContactEvents {
 function getValue<T, U extends keyof T>(source: T, propertyName: U) {
     return source[propertyName];
 }
-
+1
 function handleEvent <T extends keyof ContactEvents>(
     eventName: T, 
     handler:  (evt: ContactEvents[T]) => void
