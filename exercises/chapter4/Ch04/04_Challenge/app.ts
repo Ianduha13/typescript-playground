@@ -23,6 +23,7 @@ function query<T>(
     })
 }
 
+
 const matches = query(
     [
         { name: "Ted", age: 12 },
